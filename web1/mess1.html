@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="text" id="text">
+            
+        </div>
+        <form action="/" method="get" id="form">
+            <div class="row">
+                <input type="text" name="text" id="text" placeholder="Write som text">
+                <input type="submit" value="submit" id="submit">
+            </div>
+        </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io()
+        const [form, input] = [document.getElementById("form"), document.getElementById("text")]
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault()
+            console.log("" + input.value + "")
+            if(input.value != ""){
+                let ans = "" + input.value + "".toString()
+                console.log(ans)
+                socket.emit("input", "" + ans + "");
+                ans = ""
+            }
+            socket.on("output", (msg) => {
+                let x = document.createElement("h1");
+                x.innerHTML = "<h1>" + msg + "</h1>";
+                document.getElementById("text").appendChild(x);
+            })
+        })
+    </script>
+</body>
+</html>
